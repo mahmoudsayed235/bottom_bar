@@ -1,6 +1,7 @@
 library bottom_bar;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class BottomBar extends StatelessWidget {
   /// Creates a `BottomBar` that displays a list of `BottomBarItem` along with
@@ -61,7 +62,7 @@ class BottomBar extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: List.generate(
             items.length,
-            (int index) {
+                (int index) {
               final _selectedColor = _brightness == Brightness.light
                   ? items[index].activeColor
                   : items[index].darkActiveColor ?? items[index].activeColor;
@@ -103,19 +104,19 @@ class _BottomBarItemWidget extends StatelessWidget {
   /// Creates a Widget that displays the contents of a `BottomBarItem`
   const _BottomBarItemWidget(
       {Key? key,
-      required this.index,
-      required this.isSelected,
-      required this.selectedColor,
-      required this.selectedColorWithOpacity,
-      required this.inactiveColor,
-      required this.rightPadding,
-      required this.curve,
-      required this.duration,
-      required this.itemPadding,
-      required this.textStyle,
-      required this.icon,
-      required this.title,
-      required this.onTap})
+        required this.index,
+        required this.isSelected,
+        required this.selectedColor,
+        required this.selectedColorWithOpacity,
+        required this.inactiveColor,
+        required this.rightPadding,
+        required this.curve,
+        required this.duration,
+        required this.itemPadding,
+        required this.textStyle,
+        required this.icon,
+        required this.title,
+        required this.onTap})
       : super(key: key);
 
   /// Index of `BottomBarItem`
@@ -184,43 +185,88 @@ class _BottomBarItemWidget extends StatelessWidget {
             highlightColor: selectedColorWithOpacity,
             splashColor: selectedColorWithOpacity,
             hoverColor: selectedColorWithOpacity,
-            child: Padding(
-              padding:
-                  itemPadding - EdgeInsets.only(right: rightPadding * value),
-              child: Row(
-                children: [
-                  IconTheme(
-                    data: IconThemeData(
-                      color: Color.lerp(inactiveColor, selectedColor, value),
-                      size: 24,
-                    ),
-                    child: icon,
-                  ),
-                  ClipRect(
-                    child: SizedBox(
-                      height: 20,
-                      child: Align(
-                        alignment: const Alignment(-0.2, 0),
-                        widthFactor: value,
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                            left: rightPadding / 2,
-                            right: rightPadding,
-                          ),
-                          child: DefaultTextStyle(
-                            style: textStyle.copyWith(
-                              color: Color.lerp(
-                                  Colors.transparent, selectedColor, value),
+            child: isSelected? Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    gradient: LinearGradient(
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomLeft,
+                      colors: [
+                        Color.fromARGB(255, 91, 191, 194),
+                        Color.fromARGB(255, 0, 156, 220),
+                      ],
+                    )),
+                child:Padding(
+                  padding:
+                  itemPadding - EdgeInsets.only(right: rightPadding * value/2),
+                  child: Row(
+                    children: [
+                      icon,
+
+                      ClipRect(
+                        child: SizedBox(
+                          height: 20,
+                          child: Align(
+                            alignment: const Alignment(-0.2, 0),
+                            widthFactor: value,
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                left: rightPadding / 2,
+                                right: rightPadding,
+                              ),
+                              child: DefaultTextStyle(
+                                style: textStyle.copyWith(
+                                  color: Color.lerp(
+                                      Colors.transparent, selectedColor, value),
+                                ),
+                                child: title,
+                              ),
                             ),
-                            child: title,
                           ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
-            ),
+                )):Container(
+
+                child:Padding(
+                  padding:
+                  itemPadding - EdgeInsets.only(right: rightPadding * value),
+                  child: Row(
+                    children: [
+
+                      IconTheme(
+                        data: IconThemeData(
+                          color: Colors.green,
+                          size: 24,
+                        ),
+                        child: icon,
+                      ),
+                      ClipRect(
+                        child: SizedBox(
+                          height: 20,
+                          child: Align(
+                            alignment: const Alignment(-0.2, 0),
+                            widthFactor: value,
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                left: rightPadding / 2,
+                                right: rightPadding,
+                              ),
+                              child: DefaultTextStyle(
+                                style: textStyle.copyWith(
+                                  color: Color.lerp(
+                                      Colors.transparent, selectedColor, value),
+                                ),
+                                child: title,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )),
           ),
         );
       },
